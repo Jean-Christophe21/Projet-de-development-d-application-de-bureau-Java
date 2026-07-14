@@ -1,0 +1,91 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 13px;
+}
+
+
+.login-root {
+    -fx-background-color: #F1F5F9;
+    -fx-alignment: CENTER;
+}
+
+.login-card {
+    -fx-background-color: white;
+    -fx-background-radius: 60px;
+    -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.12), 24, 0, 0, 8);
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 60px;
+    -fx-pref-width: 400px;
+    -fx-max-width: 400px;
+    -fx-min-width: 400px;
+    -fx-padding: 40px;
+}
+
+.login-field-group {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.login-accent-bar {
+    -fx-background-color: #0D9488;
+    -fx-background-radius: 16px 16px 0 0;
+    -fx-pref-height: 6px;
+}
+
+.login-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.login-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748B;
+}
+
+.login-field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+.login-root .text-field,
+.login-root .password-field {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 14px;
+    -fx-font-size: 13px;
+    -fx-text-fill: #0F172A;
+}
+.login-root .text-field:focused,
+.login-root .password-field:focused,
+.login-root .combo-box:focused {
+    -fx-border-color: #0D9488;
+    -fx-border-width: 1.5px;
+    -fx-background-color: white;
+}
+
+
+
+.btn-login {
+    -fx-background-color: #0D9488;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10px;
+    -fx-padding: 12px 0;
+    -fx-cursor: hand;
+}
+.btn-login:hover {
+    -fx-background-color: #0F766E;
+}
+.btn-login:pressed {
+    -fx-background-color: #115E59;
+}
