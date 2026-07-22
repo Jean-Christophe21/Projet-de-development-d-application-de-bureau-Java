@@ -245,4 +245,27 @@ public class LotDAO implements IDao<Lot, Integer> {
 
         return l;
     }
+
+    public List<Lot> searchActiveLots(String keyword) throws SQLException {
+        List<Lot> list = new ArrayList<>();
+        String sql = "SELECT l.*, m.nom_commercial AS nom_medicament, "
+                + "f.nom AS nom_fournisseur "
+                + "FROM Lots l "
+                + "JOIN Medicaments m ON m.id_medicament = l.id_medicament "
+                + "LEFT JOIN Fournisseurs f ON f.id_fournisseur = l.id_fournisseur "
+                + "WHERE (m.nom_commercial LIKE ? OR m.dci LIKE ?) "
+                + "AND l.quantite_restante > 0 "
+                + "AND l.date_peremption >= date('now') "
+                + "ORDER BY l.date_peremption ASC";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            String pattern = "%" + keyword + "%";
+            ps.setString(1, pattern);
+            ps.setString(2, pattern);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(mapRow(rs));
+            }
+        }
+        return list;
+    }
 }

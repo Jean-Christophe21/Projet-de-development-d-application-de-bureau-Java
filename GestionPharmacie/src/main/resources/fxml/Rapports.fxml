@@ -21,57 +21,87 @@
    <children>
       <BorderPane layoutX="244.0" layoutY="175.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" styleClass="header-block" BorderPane.alignment="CENTER">
+            <VBox prefHeight="220.0" prefWidth="100.0" spacing="10.0" styleClass="header-block" BorderPane.alignment="CENTER">
                <padding>
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </padding>
                <children>
-                  <Label style="-fx-font-weight: bold;" styleClass="page-title" text="Rapports">
+                  <Label style="-fx-font-weight: bold;" styleClass="page-title" text="Rapports d'Activité">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="8.0">
-                     <padding>
-                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                     </padding>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
                      <children>
-                        <Label prefHeight="15.0" prefWidth="99.0" styleClass="filter-label" text="Type de rapport :" />
-                        <ComboBox fx:id="cbTypeRapport" prefWidth="150.0" />
-                        <Label prefHeight="15.0" prefWidth="28.0" styleClass="filter-label" text="Du :" />
-                        <DatePicker fx:id="dpDateDebut" />
-                        <Label prefHeight="15.0" prefWidth="26.0" styleClass="filter-label" text="Au :" />
-                        <DatePicker fx:id="dpDateFin" prefHeight="42.0" prefWidth="195.0" />
-                        <Button fx:id="btnGenererRapport" mnemonicParsing="false" prefHeight="35.0" prefWidth="87.0" styleClass="btn-primary" text="Générer " />
-                        <Button fx:id="btnExporterRapport" mnemonicParsing="false" prefHeight="35.0" prefWidth="86.0" styleClass="btn-secondary" text="Exporter" />
+                        <Label styleClass="filter-label" text="Type :" />
+                        <ComboBox fx:id="cbTypeRapport" prefWidth="170.0" />
+                        <Label styleClass="filter-label" text="Du :" />
+                        <DatePicker fx:id="dpDateDebut" prefWidth="140.0" />
+                        <Label styleClass="filter-label" text="Au :" />
+                        <DatePicker fx:id="dpDateFin" prefWidth="140.0" />
+                        <Button fx:id="btnGenererRapport" mnemonicParsing="false" styleClass="btn-primary" text="Générer" />
+                        <Button fx:id="btnExporterRapport" mnemonicParsing="false" styleClass="btn-secondary" text="Exporter" />
                      </children>
+                  </HBox>
+
+                  <!-- Cartes d'informations / Métriques -->
+                  <HBox spacing="20.0">
+                      <children>
+                          <VBox styleClass="card" prefWidth="240.0" spacing="5.0">
+                              <padding>
+                                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                              </padding>
+                              <children>
+                                  <Label text="Chiffre d'Affaires Total" styleClass="card-title" />
+                                  <Label fx:id="lblTotalChiffreAffaires" text="0 FCFA" styleClass="card-value" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                              </children>
+                          </VBox>
+                          <VBox styleClass="card" prefWidth="220.0" spacing="5.0">
+                              <padding>
+                                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                              </padding>
+                              <children>
+                                  <Label text="Nombre de Ventes" styleClass="card-title" />
+                                  <Label fx:id="lblNombreVentes" text="0" styleClass="card-value" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                              </children>
+                          </VBox>
+                          <VBox styleClass="card" prefWidth="220.0" spacing="5.0">
+                              <padding>
+                                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                              </padding>
+                              <children>
+                                  <Label text="Panier Moyen" styleClass="card-title" />
+                                  <Label fx:id="lblPanierMoyen" text="0 FCFA" styleClass="card-value" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                              </children>
+                          </VBox>
+                      </children>
                   </HBox>
                </children>
             </VBox>
          </top>
          <center>
-            <SplitPane dividerPositions="0.5151515151515151" orientation="VERTICAL" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <SplitPane dividerPositions="0.48" orientation="VERTICAL" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
-                        <TableView fx:id="tableRapport" layoutX="108.0" layoutY="20.0" prefHeight="190.0" prefWidth="662.0">
+                        <TableView fx:id="tableRapport" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
                           <columns>
-                            <TableColumn prefWidth="164.00006103515625" text="Date" />
-                            <TableColumn prefWidth="160.0" text="Description" />
-                              <TableColumn prefWidth="166.4000244140625" text="Quantité" />
-                              <TableColumn prefWidth="172.0" text="Montant" />
+                            <TableColumn prefWidth="160.0" text="Date" />
+                            <TableColumn prefWidth="320.0" text="Description / Utilisateur" />
+                              <TableColumn prefWidth="150.0" text="Nombre d'articles" />
+                              <TableColumn prefWidth="200.0" text="Montant (FCFA)" />
                           </columns>
                         </TableView>
                      </children>
                   </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
-                        <BarChart fx:id="chartRapport" layoutX="106.0" layoutY="15.0" prefHeight="184.0" prefWidth="670.0">
+                        <BarChart fx:id="chartRapport" title="Évolution des Ventes (FCFA)" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
                           <xAxis>
-                            <CategoryAxis side="BOTTOM" />
+                            <CategoryAxis label="Date / Période" side="BOTTOM" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis side="LEFT" />
+                            <NumberAxis label="Montant (FCFA)" side="LEFT" />
                           </yAxis>
                         </BarChart>
                      </children>

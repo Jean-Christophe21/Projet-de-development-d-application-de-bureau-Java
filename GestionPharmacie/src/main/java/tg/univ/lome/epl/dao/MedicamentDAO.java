@@ -130,8 +130,8 @@ public class MedicamentDAO implements IDao<Medicament, Integer> {
                 + " COALESCE(SUM(l.quantite_initiale), 0) AS lifetime_supply"
                 + " FROM Medicaments m"
                 + " LEFT JOIN Lots l ON l.id_medicament = m.id_medicament"
-                + "GROUP BY m.id_medicament"
-                + "ORDER BY m.nom_commercial";
+                + " GROUP BY m.id_medicament"
+                + " ORDER BY m.nom_commercial";
         try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 list.add(mapRow(rs));
@@ -156,8 +156,8 @@ public class MedicamentDAO implements IDao<Medicament, Integer> {
                 + "WHERE LOWER(m.nom_commercial) LIKE LOWER(?)"
                 + "OR LOWER(m.dci)            LIKE LOWER(?)"
                 + "OR LOWER(m.description)    LIKE LOWER(?)"
-                + "GROUP BY m.id_medicament"
-                + "ORDER BY m.nom_commercial";
+                + " GROUP BY m.id_medicament"
+                + " ORDER BY m.nom_commercial";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             String p = "%" + motCle + "%";
             ps.setString(1, p);

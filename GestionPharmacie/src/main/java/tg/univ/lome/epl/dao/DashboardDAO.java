@@ -75,6 +75,20 @@ public class DashboardDAO {
             }
         }
 
+        // ── VENTES DU JOUR ───────────────────────────
+        String sqlVentesJour
+                = "SELECT COALESCE(SUM(montant_total), 0) AS ventes_jour "
+                + "FROM Ventes "
+                + "WHERE date(date_vente) = date('now', 'localtime')";
+
+        try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sqlVentesJour)) {
+            if (rs.next()) {
+                metrics.put("ventes_du_jour", rs.getDouble("ventes_jour"));
+            } else {
+                metrics.put("ventes_du_jour", 0.0);
+            }
+        }
+
         // ── TOP PRODUIT ─────────────────────────────
         String sqlTop
                 = "SELECT m.nom_commercial, SUM(lv.quantite) AS total "

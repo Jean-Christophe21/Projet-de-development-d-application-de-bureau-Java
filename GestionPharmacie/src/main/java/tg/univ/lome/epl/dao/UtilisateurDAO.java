@@ -22,7 +22,7 @@ public class UtilisateurDAO implements IDao<Utilisateur, Integer> {
 
     private final Connection conn;
 
-    public UtilisateurDAO() throws SQLException {
+    public UtilisateurDAO() {
         this.conn = DatabaseConnection.getInstance().getConnection();
     }
 
@@ -97,17 +97,17 @@ public class UtilisateurDAO implements IDao<Utilisateur, Integer> {
      * Authentification : retourne l'utilisateur si identifiant + mot de passe corrects.
      * Utilisé à l'écran de login sur la maquette
      */
-    public Optional<Utilisateur> authenticate(String identifiant, String motDePasse)
-            throws SQLException {
-        String sql = ""
-                + "SELECT * FROM Utilisateurs"
-                + "WHERE identifiant = ? AND mot_de_passe = ?";
+    public Optional<Utilisateur> authenticate(String identifiant, String motDePasse) {
+        String sql = "SELECT * FROM Utilisateurs WHERE LOWER(TRIM(identifiant)) = LOWER(TRIM(?)) AND mot_de_passe = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, identifiant);
             ps.setString(2, motDePasse);
             ResultSet rs = ps.executeQuery();
             return rs.next() ? Optional.of(mapRow(rs)) : Optional.empty();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return Optional.empty();
     }
 
     /**

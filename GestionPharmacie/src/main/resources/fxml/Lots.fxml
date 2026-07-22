@@ -93,7 +93,6 @@
       </BorderPane>
    </children>
    <stylesheets>
-      <URL value="@../styles" />
       <URL value="@../styles/lots.css" />
    </stylesheets>
 </AnchorPane>

@@ -30,7 +30,7 @@
                   <TextField fx:id="txtIdentifiant" promptText="Entrez votre identifiant" styleClass="text-field" />
                   <Label styleClass="login-field-label" text="Mot de passe" />
                   <PasswordField fx:id="txtMotDePasse" promptText="Entrez votre mot de passe" styleClass="password-field" />
-                  <Button fx:id="btnConnexion" mnemonicParsing="false" prefHeight="42.0" prefWidth="106.0" styleClass="btn-login" text="Se connecter" />
+                  <Button id="seConnecterBtn" fx:id="btnConnexion" mnemonicParsing="false" onAction="#handleConnexion" prefHeight="42.0" prefWidth="106.0" styleClass="btn-login" text="Se connecter" />
                </children>
             </VBox>
          </children>

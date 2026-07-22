@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -15,17 +16,34 @@
    <children>
       <BorderPane layoutX="166.0" layoutY="49.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" styleClass="header-block" BorderPane.alignment="CENTER">
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0" styleClass="header-block" BorderPane.alignment="CENTER">
                <padding>
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </padding>
                <children>
-                  <Label style="-fx-font-weight: bold;" styleClass="page-title" text="Alertes">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label styleClass="page-subtitle" text="Suivi des ruptures de stock et des dates de péremption" />
+                  <VBox spacing="5.0">
+                      <Label style="-fx-font-weight: bold;" styleClass="page-title" text="Alertes">
+                         <font>
+                            <Font size="20.0" />
+                         </font>
+                      </Label>
+                      <Label styleClass="page-subtitle" text="Suivi des ruptures de stock et des dates de péremption" />
+                  </VBox>
+                  <!-- Cartes de résumé -->
+                  <HBox spacing="20.0">
+                      <VBox styleClass="card, card-danger" prefWidth="250.0" spacing="5.0">
+                          <Label text="Ruptures de stock" styleClass="card-title" />
+                          <Label fx:id="lblTotalRupture" text="0" styleClass="card-value" />
+                      </VBox>
+                      <VBox styleClass="card, card-warning" prefWidth="250.0" spacing="5.0">
+                          <Label text="Stocks critiques" styleClass="card-title" />
+                          <Label fx:id="lblTotalCritique" text="0" styleClass="card-value" />
+                      </VBox>
+                      <VBox styleClass="card, card-alert" prefWidth="250.0" spacing="5.0">
+                          <Label text="Lots expirés ou bientôt expirés" styleClass="card-title" />
+                          <Label fx:id="lblTotalPeremption" text="0" styleClass="card-value" />
+                      </VBox>
+                  </HBox>
                </children>
             </VBox>
          </top>

@@ -1,26 +1,102 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package tg.univ.lome.epl.controller;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import tg.univ.lome.epl.dao.UtilisateurDAO;
+import tg.univ.lome.epl.model.Utilisateur;
 
-/**
- * FXML Controller class
- *
- * @author HP
- */
+import tg.univ.lome.epl.util.SessionManager;
+
 public class LoginController implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
+    @FXML private TextField txtIdentifiant;
+    @FXML private PasswordField txtMotDePasse;
+    @FXML private Button btnConnexion;
+
+    private UtilisateurDAO utilisateurDAO;
+
+    public LoginController() {
+        // Constructeur par défaut vide pour JavaFX
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
+        try {
+            // Initialisation sécurisée dans le lifecycle JavaFX
+            this.utilisateurDAO = new UtilisateurDAO();
+        } catch (Exception e) {
+            e.printStackTrace();
+            afficherAlerte(Alert.AlertType.ERROR, "Erreur BDD", "Impossible d'initialiser la connexion avec la base de données.");
+        }
+    }
+
+    @FXML
+    private void handleConnexion(ActionEvent event) {
+        if (utilisateurDAO == null) {
+            afficherAlerte(Alert.AlertType.ERROR, "Erreur BDD", "La connexion à la base de données n'est pas disponible.");
+            return;
+        }
+
+        // Nettoyage des chaînes pour éviter les espaces invisibles en début/fin
+        String login = txtIdentifiant.getText() != null ? txtIdentifiant.getText().trim() : "";
+        String pwd = txtMotDePasse.getText() != null ? txtMotDePasse.getText().trim() : "";
+
+        // Validation de la saisie
+        if (login.isEmpty() || pwd.isEmpty()) {
+            afficherAlerte(Alert.AlertType.WARNING, "Champs incomplets", "Veuillez remplir tous les champs.");
+            return;
+        }
+
+        // Authentification via le DAO
+        Optional<Utilisateur> user = utilisateurDAO.authenticate(login, pwd);
+        //  Vérification de l'authentification
+        if (user.isPresent()) {
+            Utilisateur userConnecte = user.get();
+            SessionManager.setUtilisateurConnecte(userConnecte);
+            ouvrirTableauDeBord(event, userConnecte);
+        } else {
+            // Échec d'authentification
+            afficherAlerte(Alert.AlertType.ERROR, "Échec de connexion", "Nom d'utilisateur ou mot de passe incorrect.");
+        }
+    }
+
+    private void ouvrirTableauDeBord(ActionEvent event, Utilisateur userConnecte) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Pharmacie - Tableau de Bord");
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            afficherAlerte(Alert.AlertType.ERROR, "Erreur de chargement", "Impossible d'ouvrir la vue du Tableau de Bord.");
+        }
+    }
+
+    private void afficherAlerte(Alert.AlertType type, String titre, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(titre);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }
