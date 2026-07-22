@@ -37,11 +37,12 @@
             </HBox>
          </top>
          <center>
-            <SplitPane dividerPositions="0.6211939102564102" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <SplitPane dividerPositions="0.6596638655462185" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="518.0" prefWidth="641.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0">
                      <children>
-                        <TableView fx:id="tableLots" layoutX="-2.0" prefHeight="200.0" prefWidth="585.0">
+                        <VBox prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TableView fx:id="tableLots" layoutX="-2.0" prefHeight="518.0" prefWidth="630.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
                             <TableColumn prefWidth="79.99999618530273" text="Médicament" />
                             <TableColumn prefWidth="60.79998779296875" text="N° de lot" />
@@ -49,14 +50,14 @@
                               <TableColumn prefWidth="106.39996337890625" text="Quantité restante" />
                               <TableColumn prefWidth="72.0" text="Prix unitaire" />
                               <TableColumn prefWidth="119.20001220703125" text="Date de péremption" />
-                              <TableColumn prefWidth="50.39996337890625" text="Statut" />
+                              <TableColumn prefWidth="82.4000244140625" text="Statut" />
                           </columns>
                         </TableView>
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="518.0" prefWidth="291.0">
                      <children>
-                        <VBox layoutX="-44.0" layoutY="14.0" prefHeight="518.0" prefWidth="311.0" spacing="10.0" styleClass="form-panel" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox layoutX="27.2" layoutY="14.0" prefHeight="518.0" prefWidth="289.0" spacing="10.0" styleClass="form-panel" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>

@@ -160,6 +160,76 @@
     -fx-font-weight: bold;
 }
 
-
+.info-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.06), 12, 0, 0, 4);
+    -fx-padding: 18px;
+    -fx-spacing: 6px;
+}
+ 
+.info-panel-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+ 
+.info-panel-link {
+    -fx-font-size: 11px;
+    -fx-text-fill: #0D9488;
+    -fx-cursor: hand;
+}
+ 
+.info-panel-value {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+ 
+.info-panel-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #64748B;
+}
+ 
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-size: 34px;
+    -fx-border-color: transparent transparent #E2E8F0 transparent;
+}
+.table-view .column-header .label {
+    -fx-text-fill: #64748B;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #F1F5F9 transparent;
+    -fx-table-cell-border-color: transparent;
+    -fx-cell-size: 38px;
+}
+.table-row-cell:odd {
+    -fx-background-color: #FAFBFC;
+}
+.table-row-cell:hover {
+    -fx-background-color: #F0FDF4;
+}
+.table-row-cell:selected {
+    -fx-background-color: #DCFCE7;
+}
+.table-row-cell:selected .text {
+    -fx-fill: #0F172A;
+}
+ 
+.montant-cell {
+    -fx-text-fill: #228B22;
+    -fx-font-weight: bold;
+}
 
 
