@@ -31,13 +31,11 @@ public class LoginController implements Initializable {
     private UtilisateurDAO utilisateurDAO;
 
     public LoginController() {
-        // Constructeur par défaut vide pour JavaFX
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            // Initialisation sécurisée dans le lifecycle JavaFX
             this.utilisateurDAO = new UtilisateurDAO();
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,25 +50,20 @@ public class LoginController implements Initializable {
             return;
         }
 
-        // Nettoyage des chaînes pour éviter les espaces invisibles en début/fin
         String login = txtIdentifiant.getText() != null ? txtIdentifiant.getText().trim() : "";
         String pwd = txtMotDePasse.getText() != null ? txtMotDePasse.getText().trim() : "";
 
-        // Validation de la saisie
         if (login.isEmpty() || pwd.isEmpty()) {
             afficherAlerte(Alert.AlertType.WARNING, "Champs incomplets", "Veuillez remplir tous les champs.");
             return;
         }
 
-        // Authentification via le DAO
         Optional<Utilisateur> user = utilisateurDAO.authenticate(login, pwd);
-        //  Vérification de l'authentification
         if (user.isPresent()) {
             Utilisateur userConnecte = user.get();
             SessionManager.setUtilisateurConnecte(userConnecte);
             ouvrirTableauDeBord(event, userConnecte);
         } else {
-            // Échec d'authentification
             afficherAlerte(Alert.AlertType.ERROR, "Échec de connexion", "Nom d'utilisateur ou mot de passe incorrect.");
         }
     }

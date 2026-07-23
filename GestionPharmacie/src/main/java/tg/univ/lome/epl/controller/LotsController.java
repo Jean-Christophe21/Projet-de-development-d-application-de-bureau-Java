@@ -19,17 +19,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
-/**
- * Contrôleur de la vue Gestion des Lots d'approvisionnement.
- * Permet d'ajouter, modifier ou supprimer des lots de médicaments.
- */
+
 public class LotsController implements Initializable {
 
-    // Composants FXML
     @FXML private TableView<Lot> tableLots;
     @FXML private Button         btnNouveauLot;
 
-    // Formulaire de détail
     @FXML private ComboBox<Medicament> cbMedicamentLot;
     @FXML private TextField txtNumeroLot;
     @FXML private TextField txtQuantiteInitialeLot;
@@ -40,11 +35,9 @@ public class LotsController implements Initializable {
     @FXML private Button btnModifierLot;
     @FXML private Button btnSupprimerLot;
 
-    //  DAO
     private LotDAO lotDAO;
     private MedicamentDAO medicamentDAO;
 
-    // État interne
     private final ObservableList<Lot> lotsList = FXCollections.observableArrayList();
     private Lot lotSelectionne = null;
 
@@ -67,7 +60,6 @@ public class LotsController implements Initializable {
         viderFormulaire();
     }
 
-    //  Configuration des colonnes
     @SuppressWarnings("unchecked")
     private void configurerColonnes() {
         TableColumn<Lot, String>  colMed      = (TableColumn<Lot, String>)  tableLots.getColumns().get(0);
@@ -124,7 +116,6 @@ public class LotsController implements Initializable {
         tableLots.setItems(lotsList);
     }
 
-    // Chargement des données 
     private void chargerMedicaments() {
         try {
             List<Medicament> meds = medicamentDAO.findAll();

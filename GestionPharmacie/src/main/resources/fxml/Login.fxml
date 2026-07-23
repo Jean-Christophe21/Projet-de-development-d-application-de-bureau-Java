@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -12,9 +14,14 @@
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/login.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tg.univ.lome.epl.controller.LoginController">
    <children>
-      <StackPane prefHeight="150.0" prefWidth="200.0" styleClass="login-root" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ImageView pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 1.1; -fx-scale-y: 1.1;" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../images/fond-Login.jpeg" />
+         </image>
+      </ImageView>
+      <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="CENTER" minWidth="386.0" prefHeight="400.0" prefWidth="386.0" spacing="15.0" styleClass="login-card">
+            <VBox alignment="CENTER" maxHeight="450.0" maxWidth="400.0" minWidth="386.0" prefHeight="450.0" prefWidth="400.0" spacing="15.0" styleClass="login-card">
                <children>
                   <Label style="-fx-font-weight: bold;" styleClass="login-title" text="Gestion de Pharmacie">
                      <font>

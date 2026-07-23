@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -19,30 +20,37 @@ import java.util.ResourceBundle;
 
 /**
  * Contrôleur de la vue Catalogue des Médicaments.
- * Gère la liste des produits et le panneau de détails / formulaire
+ * 
  */
 public class CatalogueController implements Initializable {
 
-    //  Composants FXML
-    @FXML private TextField        txtRechercheCatalogue;
-    @FXML private Button           btnNouveauProduit;
-    @FXML private TableView<Medicament> tableCatalogue;
+    @FXML
+    private TextField txtRechercheCatalogue;
+    @FXML
+    private Button btnNouveauProduit;
+    @FXML
+    private TableView<Medicament> tableCatalogue;
 
-    // Formulaire de détail (panneau droit)
-    @FXML private TextField  txtNomProduit;
-    @FXML private TextArea   txtDescriptionProduit;
-    @FXML private TextField  txtSeuilAlerteProduit;
-    @FXML private ComboBox<Categorie> cbCategorieProduit;
-    @FXML private Button btnEnregistrerProduit;
-    @FXML private Button btnModifierProduit;
-    @FXML private Button btnSupprimerProduit;
+    @FXML
+    private TextField txtNomProduit;
+    @FXML
+    private TextArea txtDescriptionProduit;
+    @FXML
+    private TextField txtSeuilAlerteProduit;
+    @FXML
+    private ComboBox<Categorie> cbCategorieProduit;
+    @FXML
+    private Button btnEnregistrerProduit;
+    @FXML
+    private Button btnModifierProduit;
+    @FXML
+    private Button btnSupprimerProduit;
 
-    // DAOs
     private MedicamentDAO medicamentDAO;
-    private CategorieDAO  categorieDAO;
+    private CategorieDAO categorieDAO;
 
-    //  État interne 
     private final ObservableList<Medicament> catalogueList = FXCollections.observableArrayList();
+    private FilteredList<Medicament> filteredData;
 
     private Medicament medicamentSelectionne = null;
 
@@ -50,7 +58,7 @@ public class CatalogueController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             this.medicamentDAO = new MedicamentDAO();
-            this.categorieDAO  = new CategorieDAO();
+            this.categorieDAO = new CategorieDAO();
         } catch (SQLException e) {
             e.printStackTrace();
             afficherAlerte(Alert.AlertType.ERROR, "Erreur BDD",
@@ -65,47 +73,47 @@ public class CatalogueController implements Initializable {
         viderFormulaire();
     }
 
-    // Configuration des colonnes de la table 
     @SuppressWarnings("unchecked")
     private void configurerColonnes() {
-        TableColumn<Medicament, String>  colNom    = (TableColumn<Medicament, String>)  tableCatalogue.getColumns().get(0);
-        TableColumn<Medicament, Integer> colSeuil  = (TableColumn<Medicament, Integer>) tableCatalogue.getColumns().get(1);
-        TableColumn<Medicament, String>  colCat    = (TableColumn<Medicament, String>)  tableCatalogue.getColumns().get(2);
-        TableColumn<Medicament, Integer> colStock  = (TableColumn<Medicament, Integer>) tableCatalogue.getColumns().get(3);
+        TableColumn<Medicament, String> colNom = (TableColumn<Medicament, String>) tableCatalogue.getColumns().get(0);
+        TableColumn<Medicament, Integer> colSeuil = (TableColumn<Medicament, Integer>) tableCatalogue.getColumns()
+                .get(1);
+        TableColumn<Medicament, String> colCat = (TableColumn<Medicament, String>) tableCatalogue.getColumns().get(2);
+        TableColumn<Medicament, Integer> colStock = (TableColumn<Medicament, Integer>) tableCatalogue.getColumns()
+                .get(3);
 
-        colNom.setCellValueFactory(cd ->
-                new SimpleStringProperty(cd.getValue().getNomCommercial()));
+        colNom.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().getNomCommercial()));
 
-        colSeuil.setCellValueFactory(cd ->
-                new SimpleIntegerProperty(cd.getValue().getSeuilAlerte()).asObject());
+        colSeuil.setCellValueFactory(cd -> new SimpleIntegerProperty(cd.getValue().getSeuilAlerte()).asObject());
 
         colCat.setCellValueFactory(cd -> {
             List<Categorie> cats = cd.getValue().getCategories();
             String lib = cats.isEmpty() ? "—"
                     : cats.stream().map(Categorie::getLibelle)
-                          .reduce((a, b) -> a + ", " + b).orElse("—");
+                            .reduce((a, b) -> a + ", " + b).orElse("—");
             return new SimpleStringProperty(lib);
         });
 
-        colStock.setCellValueFactory(cd ->
-                new SimpleIntegerProperty(cd.getValue().getStockTotal()).asObject());
+        colStock.setCellValueFactory(cd -> new SimpleIntegerProperty(cd.getValue().getStockTotal()).asObject());
 
-        tableCatalogue.setItems(catalogueList);
+        filteredData = new FilteredList<>(catalogueList, p -> true);
+        tableCatalogue.setItems(filteredData);
     }
 
-    //  Chargement du ComboBox catégories
     private void chargerCategories() {
         try {
             List<Categorie> categories = categorieDAO.findAll();
             cbCategorieProduit.setItems(FXCollections.observableArrayList(categories));
             cbCategorieProduit.setCellFactory(lv -> new ListCell<>() {
-                @Override protected void updateItem(Categorie c, boolean empty) {
+                @Override
+                protected void updateItem(Categorie c, boolean empty) {
                     super.updateItem(c, empty);
                     setText(empty || c == null ? "" : c.getLibelle());
                 }
             });
             cbCategorieProduit.setButtonCell(new ListCell<>() {
-                @Override protected void updateItem(Categorie c, boolean empty) {
+                @Override
+                protected void updateItem(Categorie c, boolean empty) {
                     super.updateItem(c, empty);
                     setText(empty || c == null ? "—" : c.getLibelle());
                 }
@@ -115,7 +123,6 @@ public class CatalogueController implements Initializable {
         }
     }
 
-    // Chargement initial de tous les produits 
     private void chargerTousProduits() {
         try {
             catalogueList.setAll(medicamentDAO.findAll());
@@ -126,17 +133,16 @@ public class CatalogueController implements Initializable {
     }
 
     private void configurerEcouteurs() {
-        // Recherche en temps réel
         txtRechercheCatalogue.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == null || newVal.isBlank()) {
-                chargerTousProduits();
-            } else {
-                try {
-                    catalogueList.setAll(medicamentDAO.search(newVal.trim()));
-                } catch (SQLException e) {
-                    e.printStackTrace();
+            filteredData.setPredicate(med -> {
+                if (newVal == null || newVal.isBlank()) {
+                    return true;
                 }
-            }
+                String lower = newVal.toLowerCase().trim();
+                return (med.getNomCommercial() != null && med.getNomCommercial().toLowerCase().contains(lower)) ||
+                        (med.getDci() != null && med.getDci().toLowerCase().contains(lower)) ||
+                        (med.getDescription() != null && med.getDescription().toLowerCase().contains(lower));
+            });
         });
 
         tableCatalogue.getSelectionModel().selectedItemProperty().addListener(
@@ -164,7 +170,6 @@ public class CatalogueController implements Initializable {
         txtDescriptionProduit.setText(m.getDescription() != null ? m.getDescription() : "");
         txtSeuilAlerteProduit.setText(String.valueOf(m.getSeuilAlerte()));
 
-        // Sélectionner la 1ère catégorie du médicament dans le ComboBox
         if (!m.getCategories().isEmpty()) {
             int idCat = m.getCategories().get(0).getIdCategorie();
             cbCategorieProduit.getItems().stream()
@@ -184,9 +189,9 @@ public class CatalogueController implements Initializable {
         cbCategorieProduit.setValue(null);
     }
 
- 
     private void enregistrerProduit() {
-        if (!validerFormulaire()) return;
+        if (!validerFormulaire())
+            return;
 
         Medicament m = new Medicament();
         m.setNomCommercial(txtNomProduit.getText().trim());
@@ -195,7 +200,6 @@ public class CatalogueController implements Initializable {
 
         try {
             int newId = medicamentDAO.insert(m);
-            // Association à la catégorie choisie
             Categorie cat = cbCategorieProduit.getValue();
             if (cat != null && newId > 0) {
                 categorieDAO.addMedicamentToCategorie(newId, cat.getIdCategorie());
@@ -215,7 +219,8 @@ public class CatalogueController implements Initializable {
                     "Veuillez sélectionner un produit dans la liste avant de modifier.");
             return;
         }
-        if (!validerFormulaire()) return;
+        if (!validerFormulaire())
+            return;
 
         medicamentSelectionne.setNomCommercial(txtNomProduit.getText().trim());
         medicamentSelectionne.setDescription(txtDescriptionProduit.getText().trim());
@@ -266,7 +271,8 @@ public class CatalogueController implements Initializable {
         }
         try {
             int seuil = Integer.parseInt(txtSeuilAlerteProduit.getText().trim());
-            if (seuil < 0) throw new NumberFormatException();
+            if (seuil < 0)
+                throw new NumberFormatException();
         } catch (NumberFormatException e) {
             afficherAlerte(Alert.AlertType.WARNING, "Valeur invalide",
                     "Le seuil d'alerte doit être un nombre entier positif.");

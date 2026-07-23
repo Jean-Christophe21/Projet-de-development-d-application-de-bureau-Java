@@ -32,10 +32,9 @@ public class VenteDAO implements IDao<Vente, Integer> {
         conn.setAutoCommit(false);
 
         try {
-            String sqlVente
-                    = "INSERT INTO Ventes(date_vente, montant_total, montant_recu, "
+            String sqlVente = "INSERT INTO Ventes(date_vente, montant_total, montant_recu, monnaie_rendue, "
                     + "id_utilisateur, id_client) "
-                    + "VALUES (datetime('now','localtime'), 0, ?, ?, ?)";
+                    + "VALUES (datetime('now','localtime'), 0, ?, ?, ?, ?)";
 
             int idVente;
 
@@ -48,16 +47,22 @@ public class VenteDAO implements IDao<Vente, Integer> {
                     ps.setNull(1, Types.REAL);
                 }
 
-                if (vente.getIdUtilisateur() != null) {
-                    ps.setInt(2, vente.getIdUtilisateur());
+                if (vente.getMonnaieRendue() != null) {
+                    ps.setDouble(2, vente.getMonnaieRendue());
                 } else {
-                    ps.setNull(2, Types.INTEGER);
+                    ps.setNull(2, Types.REAL);
+                }
+
+                if (vente.getIdUtilisateur() != null) {
+                    ps.setInt(3, vente.getIdUtilisateur());
+                } else {
+                    ps.setNull(3, Types.INTEGER);
                 }
 
                 if (vente.getIdClient() != null) {
-                    ps.setInt(3, vente.getIdClient());
+                    ps.setInt(4, vente.getIdClient());
                 } else {
-                    ps.setNull(3, Types.INTEGER);
+                    ps.setNull(4, Types.INTEGER);
                 }
 
                 ps.executeUpdate();
@@ -72,16 +77,14 @@ public class VenteDAO implements IDao<Vente, Integer> {
 
             double total = 0.0;
 
-            String sqlLigne
-                    = "INSERT INTO LignesVentes(quantite, prix_unitaire_applique, id_vente, id_lot) "
+            String sqlLigne = "INSERT INTO LignesVentes(quantite, prix_unitaire_applique, id_vente, id_lot) "
                     + "VALUES (?, ?, ?, ?)";
 
             for (LigneVente ligne : vente.getLignes()) {
 
                 boolean ok = lotDAO.decrementerStock(
                         ligne.getIdLot(),
-                        ligne.getQuantite()
-                );
+                        ligne.getQuantite());
 
                 if (!ok) {
                     conn.rollback();
@@ -99,8 +102,8 @@ public class VenteDAO implements IDao<Vente, Integer> {
                 total += ligne.getSousTotal();
             }
 
-            try (PreparedStatement ps
-                    = conn.prepareStatement("UPDATE Ventes SET montant_total = ? WHERE id_vente = ?")) {
+            try (PreparedStatement ps = conn
+                    .prepareStatement("UPDATE Ventes SET montant_total = ? WHERE id_vente = ?")) {
                 ps.setDouble(1, total);
                 ps.setInt(2, idVente);
                 ps.executeUpdate();
@@ -123,8 +126,7 @@ public class VenteDAO implements IDao<Vente, Integer> {
 
     @Override
     public boolean update(Vente v) throws SQLException {
-        String sql
-                = "UPDATE Ventes SET montant_recu = ?, id_client = ? "
+        String sql = "UPDATE Ventes SET montant_recu = ?, id_client = ? "
                 + "WHERE id_vente = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -149,8 +151,7 @@ public class VenteDAO implements IDao<Vente, Integer> {
 
     @Override
     public boolean delete(Integer id) throws SQLException {
-        try (PreparedStatement ps
-                = conn.prepareStatement("DELETE FROM Ventes WHERE id_vente = ?")) {
+        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Ventes WHERE id_vente = ?")) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         }
@@ -158,8 +159,7 @@ public class VenteDAO implements IDao<Vente, Integer> {
 
     @Override
     public Optional<Vente> findById(Integer id) throws SQLException {
-        String sql
-                = "SELECT v.*, "
+        String sql = "SELECT v.*, "
                 + "u.nom || ' ' || u.prenom AS nom_utilisateur, "
                 + "c.nom || ' ' || COALESCE(c.prenom,'') AS nom_client "
                 + "FROM Ventes v "
@@ -186,8 +186,7 @@ public class VenteDAO implements IDao<Vente, Integer> {
     public List<Vente> findAll() throws SQLException {
         List<Vente> list = new ArrayList<>();
 
-        String sql
-                = "SELECT v.*, "
+        String sql = "SELECT v.*, "
                 + "u.nom || ' ' || u.prenom AS nom_utilisateur, "
                 + "c.nom || ' ' || COALESCE(c.prenom,'') AS nom_client "
                 + "FROM Ventes v "
@@ -205,12 +204,10 @@ public class VenteDAO implements IDao<Vente, Integer> {
         return list;
     }
 
-    
     public List<LigneVente> findLignesByVente(int idVente) throws SQLException {
         List<LigneVente> list = new ArrayList<>();
 
-        String sql
-                = "SELECT lv.*, m.nom_commercial AS nom_medicament, l.numero_lot "
+        String sql = "SELECT lv.*, m.nom_commercial AS nom_medicament, l.numero_lot "
                 + "FROM LignesVentes lv "
                 + "JOIN Lots l ON l.id_lot = lv.id_lot "
                 + "JOIN Medicaments m ON m.id_medicament = l.id_medicament "

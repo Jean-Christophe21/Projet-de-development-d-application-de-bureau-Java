@@ -77,7 +77,7 @@ public class CategorieDAO implements IDao<Categorie, Integer> {
         return list;
     }
 
-    //  Requêtes métier
+    
     /**
      * Toutes les catégories avec le nombre de médicaments. Image 7 — "Medicine
      * Groups (02)" avec colonne "No of Medicines".

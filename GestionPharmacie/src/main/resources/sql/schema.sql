@@ -8,7 +8,9 @@ CREATE TABLE IF NOT EXISTS Utilisateurs (
 );
 
 INSERT OR IGNORE INTO Utilisateurs (nom, prenom, identifiant, mot_de_passe, role)
-VALUES ('Admin', 'System', 'admin', 'admin123', 'ADMIN');
+VALUES 
+('Admin', 'System', 'admin', 'admin123', 'ADMIN'),
+('Vendeur', 'Bob', 'vendeur', 'vendeur123', 'VENDEUR');
 
 CREATE TABLE IF NOT EXISTS Fournisseurs (
     id_fournisseur INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -73,6 +75,7 @@ CREATE TABLE IF NOT EXISTS Ventes (
     date_vente     TEXT NOT NULL DEFAULT (datetime('now','localtime')),
     montant_total  REAL NOT NULL DEFAULT 0.00,
     montant_recu   REAL,
+    monnaie_rendue REAL,
     id_utilisateur INTEGER,
     id_client      INTEGER,
     FOREIGN KEY (id_utilisateur) REFERENCES Utilisateurs(id_utilisateur) ON DELETE SET NULL,
@@ -123,3 +126,33 @@ CREATE TABLE IF NOT EXISTS ConfigAlertes (
     id_utilisateur         INTEGER,
     FOREIGN KEY (id_utilisateur) REFERENCES Utilisateurs(id_utilisateur) ON DELETE SET NULL
 );
+
+-- DUMMY DATA FOR TESTING
+INSERT OR IGNORE INTO Categories (id_categorie, libelle) VALUES 
+(1, 'Antalgique'),
+(2, 'Antibiotique'),
+(3, 'Anti-inflammatoire'),
+(4, 'Antipaludéen'),
+(5, 'Vitamines');
+
+INSERT OR IGNORE INTO Fournisseurs (id_fournisseur, nom, contact, email, adresse) VALUES
+(1, 'Pharma Supply Co.', '+228 90 00 00 01', 'contact@pharmasupply.tg', 'Lome, Togo'),
+(2, 'Medicus Distribution', '+228 91 11 22 33', 'sales@medicus.tg', 'Kara, Togo');
+
+INSERT OR IGNORE INTO Medicaments (id_medicament, nom_commercial, dci, description, comment_utiliser, effets_secondaires, est_generique, seuil_alerte) VALUES
+(1, 'Paracétamol 500mg', 'Paracétamol', 'Boîte de 16 comprimés', 'Voie orale, 1 comprimé si douleur', 'Rares', 1, 20),
+(2, 'Amoxicilline 1g', 'Amoxicilline', 'Boîte de 14 comprimés', '1 comprimé matin et soir', 'Troubles digestifs', 1, 10),
+(3, 'Ibuprofène 400mg', 'Ibuprofène', 'Boîte de 20 comprimés', '1 comprimé par repas', 'Maux d''estomac', 1, 15),
+(4, 'Artequin', 'Artésunate', 'Traitement antipaludique', 'Selon prescription', 'Maux de tête', 0, 5),
+(5, 'Vitamine C', 'Acide Ascorbique', 'Tube de 10 comprimés effervescents', '1 le matin', 'Aucun', 0, 30);
+
+INSERT OR IGNORE INTO MedicamentCategories (id_medicament, id_categorie) VALUES
+(1, 1), (2, 2), (3, 3), (4, 4), (5, 5);
+
+INSERT OR IGNORE INTO Lots (id_lot, numero_lot, quantite_initiale, quantite_restante, prix_unitaire, date_peremption, id_medicament, id_fournisseur) VALUES
+(1, 'L2023-001', 100, 100, 500.0, '2028-12-31', 1, 1),
+(2, 'L2023-002', 50, 50, 2000.0, '2026-06-30', 2, 2),
+(3, 'L2023-003', 75, 75, 800.0, '2027-10-15', 3, 1),
+(4, 'L2023-004', 30, 30, 4500.0, '2025-05-20', 4, 2),
+(5, 'L2023-005', 150, 150, 1000.0, '2029-01-01', 5, 1);
+

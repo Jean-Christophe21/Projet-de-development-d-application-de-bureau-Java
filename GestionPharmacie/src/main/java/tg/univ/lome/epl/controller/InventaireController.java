@@ -18,22 +18,18 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-// Contrôleur de la vue Inventaire.
  
 public class InventaireController implements Initializable {
 
-    //Composants FXML
     @FXML private TextField txtRechercheInventaire;
     @FXML private ComboBox<Categorie> cbFiltreCategorie;
     @FXML private Button btnFiltrer;
     @FXML private TableView<Medicament> tableInventaire;
     @FXML private Label lblNombreProduits;
 
-    // élément DAO
     private MedicamentDAO medicamentDAO;
     private CategorieDAO categorieDAO;
 
-    // Données du tableView
     private final ObservableList<Medicament> medicamentsList = FXCollections.observableArrayList();
 
     @Override
@@ -54,7 +50,6 @@ public class InventaireController implements Initializable {
         configurerEcouteurs();
     }
 
-    // Configuration des colonnes
     @SuppressWarnings("unchecked")
     private void configurerColonnes() {
         TableColumn<Medicament, String>  colNom      = (TableColumn<Medicament, String>)  tableInventaire.getColumns().get(0);
@@ -108,7 +103,6 @@ public class InventaireController implements Initializable {
         tableInventaire.setItems(medicamentsList);
     }
 
-    // Chargement des catégories dans le ComboBox
     private void chargerCategories() {
         try {
             List<Categorie> categories = categorieDAO.findAll();
@@ -136,7 +130,6 @@ public class InventaireController implements Initializable {
         }
     }
 
-    // Chargement initial de tous les médicaments
     private void chargerTousMedicaments() {
         try {
             List<Medicament> meds = medicamentDAO.findAll();
@@ -148,16 +141,13 @@ public class InventaireController implements Initializable {
         }
     }
 
-    // Écoute des actions utilisateur 
     private void configurerEcouteurs() {
-        // Recherche en temps réel
         txtRechercheInventaire.textProperty().addListener((obs, oldVal, newVal) -> filtrer());
 
-        // Bouton Filtrer
         btnFiltrer.setOnAction(e -> filtrer());
 
         tableInventaire.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldVal, newVal) -> { /* extension future */ });
+                (obs, oldVal, newVal) -> { });
     }
 
     private void filtrer() {
@@ -168,7 +158,6 @@ public class InventaireController implements Initializable {
             List<Medicament> resultats;
 
             if (categorie != null && !motCle.isEmpty()) {
-                // Filtre combiné : catégorie + recherche texte
                 resultats = medicamentDAO.findByCategorie(categorie.getIdCategorie());
                 final String lower = motCle.toLowerCase();
                 resultats.removeIf(m -> !m.getNomCommercial().toLowerCase().contains(lower));
@@ -189,12 +178,10 @@ public class InventaireController implements Initializable {
         }
     }
 
-    // Mise à jour du label de comptage
     private void mettreAJourCompteur() {
         lblNombreProduits.setText("Nombre de produits : " + medicamentsList.size());
     }
 
-    // Utilitaire
     private void afficherAlerte(Alert.AlertType type, String titre, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(titre);

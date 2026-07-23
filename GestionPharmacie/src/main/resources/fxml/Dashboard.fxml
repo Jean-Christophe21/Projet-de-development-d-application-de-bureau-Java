@@ -53,7 +53,7 @@
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding>
                <children>
-                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #E3F2FD; -fx-background-radius: 10;" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="220.0" spacing="8.0" style="-fx-background-radius: 10;" HBox.hgrow="ALWAYS">
                      <children>
                         <Label style="-fx-font-weight: bold;" styleClass="stat-card-title" text=" Ventes du jour">
                            <font>
@@ -71,7 +71,7 @@
                         <String fx:value="stat-card" />
                      </styleClass>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #FFF3E0; -fx-background-radius: 10;" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="220.0" spacing="8.0" style="-fx-background-radius: 10;" HBox.hgrow="ALWAYS">
                      <children>
                         <Label style="-fx-font-weight: bold;" styleClass="stat-card-title" text="Alertes Actives">
                            <font>
@@ -89,7 +89,7 @@
                         <String fx:value="stat-card" />
                      </styleClass>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #FFEBEE; -fx-background-radius: 10;" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="220.0" spacing="8.0" style="-fx-background-radius: 10;" HBox.hgrow="ALWAYS">
                      <children>
                         <Label prefHeight="20.0" prefWidth="119.0" style="-fx-font-weight: bold;" styleClass="stat-card-title" text="Produits en rupture">
                            <font>
@@ -113,19 +113,20 @@
                <children>
                   <VBox prefHeight="399.0" prefWidth="776.0" spacing="12.0" styleClass="info-panel">
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="68.0" prefWidth="739.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="739.0" spacing="10.0">
                            <children>
                               <Label styleClass="info-panel-title" text="Activité récente" HBox.hgrow="ALWAYS" />
-                              <Label styleClass="info-panel-link" text="Voir toutes les ventes " />
+                              <Button fx:id="btnActualiserDashboard" mnemonicParsing="false" styleClass="nav-button" text="🔄 Actualiser" />
+                              <Button fx:id="btnSupprimerVente" mnemonicParsing="false" styleClass="nav-button-danger" text="🗑 Supprimer sélection" />
                            </children>
                         </HBox>
-                        <TableView prefHeight="200.0" prefWidth="200.0" styleClass="tableActiviteRecente">
+                        <TableView fx:id="tableActiviteRecente" prefHeight="320.0" prefWidth="200.0" styleClass="tableActiviteRecente">
                           <columns>
-                            <TableColumn prefWidth="116.0000057220459" text="Date" />
-                            <TableColumn prefWidth="184.0" text="Médicament" />
-                              <TableColumn prefWidth="163.20001220703125" text="Quantité" />
-                              <TableColumn prefWidth="171.20004272460938" text="Montant" />
-                              <TableColumn prefWidth="141.5999755859375" text="Vendu par" />
+                            <TableColumn fx:id="colActDate" prefWidth="148.0" text="Date" />
+                            <TableColumn fx:id="colActMedicament" prefWidth="180.0" text="Médicament" />
+                              <TableColumn fx:id="colActQte" prefWidth="100.0" text="Quantité" />
+                              <TableColumn fx:id="colActMontant" prefWidth="140.0" text="Montant" />
+                              <TableColumn fx:id="colActVendeur" prefWidth="130.0" text="Vendu par" />
                           </columns>
                         </TableView>
                      </children>

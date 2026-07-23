@@ -42,7 +42,7 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label styleClass="recu-total-label" text="TOTAL :" />
-                  <Label fx:id="se" text="0.00 XOF" />
+                  <Label fx:id="txtMontantTotal" text="0.00 XOF" />
                </children>
             </HBox>
             <Separator prefWidth="200.0" />

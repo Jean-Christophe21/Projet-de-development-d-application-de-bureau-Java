@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -17,6 +18,12 @@ import tg.univ.lome.epl.model.LigneVente;
 import tg.univ.lome.epl.model.Lot;
 import tg.univ.lome.epl.model.Vente;
 import tg.univ.lome.epl.util.SessionManager;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import java.io.IOException;
 
 /**
  * FXML Controller class for Ventes/Caisse
@@ -48,6 +55,7 @@ public class VentesController implements Initializable {
     private VenteDAO venteDAO;
 
     private final ObservableList<Lot> resultatsList = FXCollections.observableArrayList();
+    private FilteredList<Lot> filteredData;
     private final ObservableList<LigneVente> panierList = FXCollections.observableArrayList();
 
     private double totalVente = 0.0;
@@ -59,7 +67,8 @@ public class VentesController implements Initializable {
             this.venteDAO = new VenteDAO();
         } catch (SQLException e) {
             e.printStackTrace();
-            afficherAlerte(Alert.AlertType.ERROR, "Erreur BDD", "Impossible d'initialiser la connexion avec la base de données.");
+            afficherAlerte(Alert.AlertType.ERROR, "Erreur BDD",
+                    "Impossible d'initialiser la connexion avec la base de données.");
         }
 
         TableColumn<Lot, String> colResMedicament = (TableColumn<Lot, String>) tableResultats.getColumns().get(0);
@@ -68,30 +77,48 @@ public class VentesController implements Initializable {
         TableColumn<Lot, Integer> colResQte = (TableColumn<Lot, Integer>) tableResultats.getColumns().get(3);
         TableColumn<Lot, String> colResPerem = (TableColumn<Lot, String>) tableResultats.getColumns().get(4);
 
-        colResMedicament.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNomMedicament()));
+        colResMedicament
+                .setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNomMedicament()));
         colResLot.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNumeroLot()));
         colResPrix.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getPrixUnitaire()));
-        colResQte.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getQuantiteRestante()));
+        colResQte
+                .setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getQuantiteRestante()));
         colResPerem.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDatePeremption()));
 
-        tableResultats.setItems(resultatsList);
+        filteredData = new FilteredList<>(resultatsList, p -> true);
+        tableResultats.setItems(filteredData);
 
-        TableColumn<LigneVente, String> colPanMedicament = (TableColumn<LigneVente, String>) tablePanier.getColumns().get(0);
+        TableColumn<LigneVente, String> colPanMedicament = (TableColumn<LigneVente, String>) tablePanier.getColumns()
+                .get(0);
         TableColumn<LigneVente, String> colPanLot = (TableColumn<LigneVente, String>) tablePanier.getColumns().get(1);
         TableColumn<LigneVente, Integer> colPanQte = (TableColumn<LigneVente, Integer>) tablePanier.getColumns().get(2);
         TableColumn<LigneVente, Double> colPanPrix = (TableColumn<LigneVente, Double>) tablePanier.getColumns().get(3);
         TableColumn<LigneVente, Double> colPanTotal = (TableColumn<LigneVente, Double>) tablePanier.getColumns().get(4);
 
-        colPanMedicament.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNomMedicament()));
+        colPanMedicament
+                .setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNomMedicament()));
         colPanLot.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNumeroLot()));
         colPanQte.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getQuantite()));
-        colPanPrix.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getPrixUnitaireApplique()));
+        colPanPrix.setCellValueFactory(
+                cellData -> new SimpleObjectProperty<>(cellData.getValue().getPrixUnitaireApplique()));
         colPanTotal.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getSousTotal()));
 
         tablePanier.setItems(panierList);
 
-        btnRechercher.setOnAction(e -> handleRecherche());
-        txtRechercheMedicament.setOnAction(e -> handleRecherche());
+        txtRechercheMedicament.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(lot -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lower = newValue.toLowerCase().trim();
+                return (lot.getNomMedicament() != null && lot.getNomMedicament().toLowerCase().contains(lower)) ||
+                        (lot.getNumeroLot() != null && lot.getNumeroLot().toLowerCase().contains(lower));
+            });
+        });
+        btnRechercher.setOnAction(e -> {
+            // Forcer le focus ou un petit refresh si désiré.
+            tableResultats.refresh();
+        });
         btnAjouterPanier.setOnAction(e -> handleAjouterPanier());
         btnValiderVente.setOnAction(e -> handleValiderVente());
 
@@ -107,20 +134,23 @@ public class VentesController implements Initializable {
     }
 
     private void handleRecherche() {
-        String keyword = txtRechercheMedicament.getText() != null ? txtRechercheMedicament.getText().trim() : "";
-        try {
-            resultatsList.setAll(lotDAO.searchActiveLots(keyword));
-        } catch (SQLException e) {
-            e.printStackTrace();
-            afficherAlerte(Alert.AlertType.ERROR, "Erreur Recherche", "Erreur lors de la recherche des médicaments.");
-        }
     }
 
     private void handleAjouterPanier() {
         Lot selectedLot = tableResultats.getSelectionModel().getSelectedItem();
         if (selectedLot == null) {
-            afficherAlerte(Alert.AlertType.WARNING, "Sélection requise", "Veuillez sélectionner un médicament dans le tableau des résultats.");
+            afficherAlerte(Alert.AlertType.WARNING, "Sélection requise",
+                    "Veuillez sélectionner un médicament dans le tableau des résultats.");
             return;
+        }
+
+        if (selectedLot.getDatePeremption() != null) {
+            java.time.LocalDate peremption = java.time.LocalDate.parse(selectedLot.getDatePeremption());
+            if (peremption.isBefore(java.time.LocalDate.now())) {
+                afficherAlerte(Alert.AlertType.ERROR, "Produit périmé",
+                        "Ce produit est périmé et ne peut pas être vendu.");
+                return;
+            }
         }
 
         TextInputDialog dialog = new TextInputDialog("1");
@@ -140,7 +170,8 @@ public class VentesController implements Initializable {
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
-            afficherAlerte(Alert.AlertType.ERROR, "Saisie invalide", "Veuillez saisir un entier strictement supérieur à 0.");
+            afficherAlerte(Alert.AlertType.ERROR, "Saisie invalide",
+                    "Veuillez saisir un entier strictement supérieur à 0.");
             return;
         }
 
@@ -153,7 +184,8 @@ public class VentesController implements Initializable {
 
         if (qte + qteDansPanier > selectedLot.getQuantiteRestante()) {
             afficherAlerte(Alert.AlertType.ERROR, "Stock insuffisant",
-                    "Le lot sélectionné ne contient que " + (selectedLot.getQuantiteRestante() - qteDansPanier) + " unités restantes.");
+                    "Le lot sélectionné ne contient que " + (selectedLot.getQuantiteRestante() - qteDansPanier)
+                            + " unités restantes.");
             return;
         }
 
@@ -190,13 +222,40 @@ public class VentesController implements Initializable {
 
     private void handleValiderVente() {
         if (panierList.isEmpty()) {
-            afficherAlerte(Alert.AlertType.WARNING, "Panier vide", "Veuillez ajouter des médicaments au panier avant de valider.");
+            afficherAlerte(Alert.AlertType.WARNING, "Panier vide",
+                    "Veuillez ajouter des médicaments au panier avant de valider.");
             return;
         }
 
+        TextInputDialog dialog = new TextInputDialog(String.valueOf(totalVente));
+        dialog.setTitle("Encaissement");
+        dialog.setHeaderText(String.format("Total à payer : %,.2f FCFA", totalVente));
+        dialog.setContentText("Montant reçu du client :");
+
+        Optional<String> result = dialog.showAndWait();
+        if (!result.isPresent())
+            return;
+
+        double montantRecu = 0;
+        try {
+            montantRecu = Double.parseDouble(result.get());
+        } catch (NumberFormatException e) {
+            afficherAlerte(Alert.AlertType.ERROR, "Erreur", "Le montant reçu doit être un nombre valide.");
+            return;
+        }
+
+        if (montantRecu < totalVente) {
+            afficherAlerte(Alert.AlertType.ERROR, "Fonds insuffisants",
+                    "Le montant reçu est inférieur au total à payer.");
+            return;
+        }
+
+        double monnaieRendue = montantRecu - totalVente;
+
         Vente vente = new Vente();
         vente.setMontantTotal(totalVente);
-        vente.setMontantRecu(totalVente); // Payé au comptant par défaut
+        vente.setMontantRecu(montantRecu);
+        vente.setMonnaieRendue(monnaieRendue);
 
         if (SessionManager.getUtilisateurConnecte() != null) {
             vente.setIdUtilisateur(SessionManager.getUtilisateurConnecte().getIdUtilisateur());
@@ -205,14 +264,46 @@ public class VentesController implements Initializable {
         vente.setLignes(panierList);
 
         try {
-            venteDAO.insert(vente);
-            afficherAlerte(Alert.AlertType.INFORMATION, "Vente validée", "La vente a été enregistrée avec succès !");
+            int idVente = venteDAO.insert(vente);
+            vente.setIdVente(idVente);
+
+            venteDAO.findById(idVente).ifPresent(venteSaved -> {
+                vente.setDateVente(venteSaved.getDateVente());
+                vente.setCodeVente(venteSaved.getCodeVente());
+                if (venteSaved.getLignes() != null && !venteSaved.getLignes().isEmpty()) {
+                    vente.setLignes(venteSaved.getLignes());
+                }
+            });
+
+            if (vente.getLignes() == null || vente.getLignes().isEmpty()) {
+                vente.setLignes(new java.util.ArrayList<>(panierList));
+            }
+
+            afficherAlerte(Alert.AlertType.INFORMATION, "Vente validée",
+                    String.format("Vente enregistrée avec succès !\nMonnaie à rendre : %,.2f FCFA", monnaieRendue));
             panierList.clear();
             calculerTotal();
-            handleRecherche(); 
+            handleRecherche();
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Recu.fxml"));
+                Parent root = loader.load();
+                RecuController controller = loader.getController();
+                controller.setVente(vente);
+
+                Stage stage = new Stage();
+                stage.setTitle("Ticket de Caisse");
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
-            afficherAlerte(Alert.AlertType.ERROR, "Erreur de validation", "Erreur lors de l'enregistrement de la vente : " + e.getMessage());
+            afficherAlerte(Alert.AlertType.ERROR, "Erreur de validation",
+                    "Erreur lors de l'enregistrement de la vente : " + e.getMessage());
         }
     }
 

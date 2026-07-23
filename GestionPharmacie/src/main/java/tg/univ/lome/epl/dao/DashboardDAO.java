@@ -28,8 +28,7 @@ public class DashboardDAO {
         Map<String, Object> metrics = new HashMap<>();
 
         // ── INVENTAIRE ───────────────────────────────
-        String sqlInventaire
-                = "SELECT "
+        String sqlInventaire = "SELECT "
                 + "(SELECT COUNT(DISTINCT id_medicament) FROM Lots "
                 + " WHERE quantite_restante > 0 "
                 + " AND date_peremption >= date('now')) AS medicaments_disponibles, "
@@ -57,8 +56,7 @@ public class DashboardDAO {
         }
 
         // ── VENTES DU MOIS ───────────────────────────
-        String sqlVentes
-                = "SELECT "
+        String sqlVentes = "SELECT "
                 + "COALESCE(SUM(v.montant_total),0) AS revenu_mois, "
                 + "COUNT(v.id_vente) AS nb_factures, "
                 + "COALESCE(SUM(lv.quantite),0) AS qty_vendues "
@@ -76,8 +74,7 @@ public class DashboardDAO {
         }
 
         // ── VENTES DU JOUR ───────────────────────────
-        String sqlVentesJour
-                = "SELECT COALESCE(SUM(montant_total), 0) AS ventes_jour "
+        String sqlVentesJour = "SELECT COALESCE(SUM(montant_total), 0) AS ventes_jour "
                 + "FROM Ventes "
                 + "WHERE date(date_vente) = date('now', 'localtime')";
 
@@ -90,8 +87,7 @@ public class DashboardDAO {
         }
 
         // ── TOP PRODUIT ─────────────────────────────
-        String sqlTop
-                = "SELECT m.nom_commercial, SUM(lv.quantite) AS total "
+        String sqlTop = "SELECT m.nom_commercial, SUM(lv.quantite) AS total "
                 + "FROM LignesVentes lv "
                 + "JOIN Lots l ON l.id_lot = lv.id_lot "
                 + "JOIN Medicaments m ON m.id_medicament = l.id_medicament "
@@ -127,8 +123,7 @@ public class DashboardDAO {
 
         List<Object[]> list = new ArrayList<>();
 
-        String sql
-                = "SELECT strftime('%Y-%m', date_vente) AS mois, "
+        String sql = "SELECT strftime('%Y-%m', date_vente) AS mois, "
                 + "SUM(montant_total) AS revenu "
                 + "FROM Ventes "
                 + "WHERE date_vente >= date('now', '-' || ? || ' months') "
@@ -141,9 +136,9 @@ public class DashboardDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(new Object[]{
-                    rs.getString("mois"),
-                    rs.getDouble("revenu")
+                list.add(new Object[] {
+                        rs.getString("mois"),
+                        rs.getDouble("revenu")
                 });
             }
         }
@@ -153,8 +148,7 @@ public class DashboardDAO {
 
     private int countLotsExpirantDans(int jours) throws SQLException {
 
-        String sql
-                = "SELECT COUNT(*) FROM Lots "
+        String sql = "SELECT COUNT(*) FROM Lots "
                 + "WHERE date_peremption BETWEEN date('now') "
                 + "AND date('now','+' || ? || ' days') "
                 + "AND quantite_restante > 0";
@@ -167,5 +161,30 @@ public class DashboardDAO {
 
             return rs.next() ? rs.getInt(1) : 0;
         }
+    }
+
+    public List<Object[]> getActivitesRecentes() throws SQLException {
+        List<Object[]> list = new ArrayList<>();
+        String sql = "SELECT v.id_vente, v.date_vente, m.nom_commercial, lv.quantite, (lv.quantite * lv.prix_unitaire_applique) as montant, COALESCE(u.nom, 'Anonyme') as vendeur "
+                +
+                "FROM LignesVentes lv " +
+                "JOIN Ventes v ON lv.id_vente = v.id_vente " +
+                "JOIN Lots l ON lv.id_lot = l.id_lot " +
+                "JOIN Medicaments m ON l.id_medicament = m.id_medicament " +
+                "LEFT JOIN Utilisateurs u ON v.id_utilisateur = u.id_utilisateur " +
+                "ORDER BY v.date_vente DESC LIMIT 15";
+        try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                list.add(new Object[] {
+                        rs.getInt("id_vente"),
+                        rs.getString("date_vente"),
+                        rs.getString("nom_commercial"),
+                        rs.getInt("quantite"),
+                        rs.getDouble("montant"),
+                        rs.getString("vendeur")
+                });
+            }
+        }
+        return list;
     }
 }

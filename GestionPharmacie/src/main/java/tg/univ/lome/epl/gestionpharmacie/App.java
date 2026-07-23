@@ -17,7 +17,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("/fxml/Dashboard"), 640, 480);
+        scene = new Scene(loadFXML("/fxml/Login"), 640, 480);
+        String css = App.class.getResource("/styles/dark-theme.css").toExternalForm();
+        scene.getStylesheets().add(css);
         stage.setScene(scene);
         stage.show();
     }
