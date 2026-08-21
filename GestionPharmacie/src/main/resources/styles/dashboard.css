@@ -1,0 +1,235 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 13px;
+}
+
+.dashboard-root {
+    -fx-background-color: #F1F5F9;
+}
+
+
+.sidebar {
+    -fx-background-color: #111827;
+    -fx-padding: 20px 12px;
+}
+
+
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94A3B8;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 16px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-max-width: Infinity;
+}
+.nav-button:hover {
+    -fx-background-color: #228B22;
+    -fx-text-fill: white;
+}
+
+.nav-button-active {
+    -fx-background-color: #228B22;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 16px;
+    -fx-background-radius: 8px;
+    -fx-max-width: Infinity;
+    -fx-cursor: hand;
+}
+
+.nav-button-danger {
+    -fx-background-color: transparent;
+    -fx-text-fill: #F87171;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 16px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-max-width: Infinity;
+}
+.nav-button-danger:hover {
+    -fx-background-color: #7F1D1D;
+    -fx-text-fill: white;
+}
+
+
+.top-bar {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #E2E8F0 transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 14px 24px;
+}
+
+.top-bar-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.top-bar-user {
+    -fx-font-size: 13px;
+    -fx-text-fill: #334155;
+    -fx-font-weight: bold;
+}
+
+.top-bar-role {
+    -fx-font-size: 11px;
+    -fx-text-fill: #0D9488;
+}
+
+.content-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.content-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+}
+
+
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 14px;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1px 1px 1px 1px;
+    -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.06), 12, 0, 0, 4);
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+}
+
+.stat-card-green {
+    -fx-border-color: #22C55E;
+}
+.stat-card-green  {
+    -fx-background-color: #DCFCE7;
+}
+.stat-card-green .stat-card-value {
+    -fx-text-fill: #16A34A;
+}
+
+.stat-card-yellow {
+    -fx-border-color: #EAB308;
+}
+.stat-card-yellow {
+    -fx-background-color: #FEF9C3;
+}
+.stat-card-yellow .stat-card-value {
+    -fx-text-fill: #CA8A04;
+}
+
+.stat-card-blue {
+    -fx-border-color: #3B82F6;
+}
+.stat-card-blue {
+    -fx-background-color: #DBEAFE;
+}
+.stat-card-blue .stat-card-value {
+    -fx-text-fill: #2563EB;
+}
+
+
+.stat-card-red {
+    -fx-border-color: #EF4444;
+}
+.stat-card-red {
+    -fx-background-color: #FEE2E2;
+}
+.stat-card-red .stat-card-value {
+    -fx-text-fill: #DC2626;
+}
+
+.stat-card-title {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+}
+
+.stat-card-value {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.info-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.06), 12, 0, 0, 4);
+    -fx-padding: 18px;
+    -fx-spacing: 6px;
+}
+ 
+.info-panel-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+ 
+.info-panel-link {
+    -fx-font-size: 11px;
+    -fx-text-fill: #0D9488;
+    -fx-cursor: hand;
+}
+ 
+.info-panel-value {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+ 
+.info-panel-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #64748B;
+}
+ 
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-size: 34px;
+    -fx-border-color: transparent transparent #E2E8F0 transparent;
+}
+.table-view .column-header .label {
+    -fx-text-fill: #64748B;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #F1F5F9 transparent;
+    -fx-table-cell-border-color: transparent;
+    -fx-cell-size: 38px;
+}
+.table-row-cell:odd {
+    -fx-background-color: #FAFBFC;
+}
+.table-row-cell:hover {
+    -fx-background-color: #F0FDF4;
+}
+.table-row-cell:selected {
+    -fx-background-color: #DCFCE7;
+}
+.table-row-cell:selected .text {
+    -fx-fill: #0F172A;
+}
+ 
+.montant-cell {
+    -fx-text-fill: #228B22;
+    -fx-font-weight: bold;
+}
+
+

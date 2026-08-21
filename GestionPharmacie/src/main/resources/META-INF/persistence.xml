@@ -3,7 +3,7 @@
   <persistence-unit name="tg.univ.lome.epl_GestionPharmacie_jar_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:.\pharmacie.db"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\Users\amevo\Documents\NetBeansProjects\GestionPharmacie\pharmacie.db"/>
       <property name="javax.persistence.jdbc.user" value=""/>
       <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
       <property name="javax.persistence.jdbc.password" value=""/>

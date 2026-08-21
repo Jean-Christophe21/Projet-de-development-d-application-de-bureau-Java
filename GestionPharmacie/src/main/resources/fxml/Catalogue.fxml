@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="684.0" prefWidth="1000.0" styleClass="catalogue-root" stylesheets="@../styles/catalogue.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tg.univ.lome.epl.controller.CatalogueController">
+   <children>
+      <BorderPane layoutX="121.0" layoutY="87.0" prefHeight="730.0" prefWidth="1046.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" styleClass="header-block" BorderPane.alignment="CENTER_LEFT">
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+               <children>
+                  <Label style="-fx-font-weight: bold;" styleClass="page-title" text="Catalogue des Médicaments">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <TextField fx:id="txtRechercheCatalogue" promptText="Rechercher un produit..." />
+                  <Button fx:id="btnNouveauProduit" mnemonicParsing="false" styleClass="btn-primary" text="Nouveau produit" />
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <SplitPane dividerPositions="0.6123949579831933" prefHeight="598.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="552.0" prefWidth="607.0">
+                     <children>
+                        <TableView fx:id="tableCatalogue" prefHeight="552.0" prefWidth="578.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                            <TableColumn prefWidth="169.60000228881836" text="Nom" />
+                              <TableColumn prefWidth="82.40007019042969" text="Seuil d' alerte" />
+                              <TableColumn prefWidth="201.60003662109375" text="Categorie" />
+                              <TableColumn prefWidth="113.5999755859375" text="Stock actuel" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <VBox layoutX="151.0" layoutY="136.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <children>
+                              <Label style="-fx-font-weight: bold;" styleClass="form-title" text="Détails du produit">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label styleClass="form-label" text="Nom" />
+                              <TextField fx:id="txtNomProduit" />
+                              <Label styleClass="form-label" text="Description" />
+                              <TextArea fx:id="txtDescriptionProduit" prefHeight="50.0" prefRowCount="3" prefWidth="518.0" />
+                              <Label styleClass="form-label" text="Seuil d'alerte" />
+                              <TextField fx:id="txtSeuilAlerteProduit" promptText="Ex: 10" />
+                              <Label styleClass="form-label" text="Catégorie" />
+                              <ComboBox fx:id="cbCategorieProduit" prefWidth="150.0" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="btnEnregistrerProduit" mnemonicParsing="false" styleClass="btn-primary" text="Enregistrer" />
+                                    <Button fx:id="btnModifierProduit" mnemonicParsing="false" styleClass="btn-secondary" text="Modifier" />
+                                    <Button fx:id="btnSupprimerProduit" mnemonicParsing="false" styleClass="btn-danger" text="Supprimer" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
